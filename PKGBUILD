@@ -6,7 +6,7 @@ url='https://wiki.ros.org/rosbag'
 pkgname='ros-noetic-rosbag'
 pkgver='1.16.0'
 arch=('i686' 'x86_64' 'aarch64' 'armv7h' 'armv6h')
-pkgrel=1
+pkgrel=2
 license=('BSD')
 
 ros_makedepends=(
@@ -51,8 +51,19 @@ depends=(
 )
 
 _dir="ros_comm-${pkgver}/tools/rosbag"
-source=("${pkgname}-${pkgver}.tar.gz"::"https://github.com/ros/ros_comm/archive/${pkgver}.tar.gz")
-sha256sums=('0a51857a50cf646db4af85469cb0e4877b1484f7aa0c00ec65a8be7ff574a886')
+source=(
+    "${pkgname}-${pkgver}.tar.gz"::"https://github.com/ros/ros_comm/archive/${pkgver}.tar.gz"
+    "boost.patch"
+)
+sha256sums=(
+    '0a51857a50cf646db4af85469cb0e4877b1484f7aa0c00ec65a8be7ff574a886'
+    '40333c26a06f166b7be3249bada04128364b84dafeb2f2b516152b5b935e8206'
+)
+
+prepare() {
+    cd ${srcdir}/ros_comm-${pkgver}
+    patch -p1 -i ${srcdir}/boost.patch
+}
 
 build() {
 	# Use ROS environment variables.
